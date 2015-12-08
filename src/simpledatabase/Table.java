@@ -23,7 +23,6 @@ public class Table extends Operator{
 		} 
 		
 	}
-
 	
 	/**
      * Create a new tuple and return the tuple to its parent.
@@ -32,47 +31,45 @@ public class Table extends Operator{
      */
 	@Override
 	public Tuple next(){
-		//Delete the lines below and add your code here
-		
-		try {
-			if (!getAttribute){
-				String attrLine = br.readLine();
-				String dttpLine = br.readLine();
-				String tuplLine = br.readLine();
-				if (tuplLine == null)
-					return null;
+		try{
+			String attributeline,dataTypeline,tupleline;
+		  	if(getAttribute==false){
+				attributeline = br.readLine();
+				dataTypeline = br.readLine();
+			    tupleline = br.readLine();
 				getAttribute = true;
-				tuple = new Tuple (attrLine, dttpLine, tuplLine);
+				if(tupleline==null)
+					return null;
+				tuple=new Tuple(attributeline,dataTypeline,tupleline);
 				tuple.setAttributeName();
 				tuple.setAttributeType();
 				tuple.setAttributeValue();
 				return tuple;
-			}
-			else{
-				ArrayList<Attribute> attrList = new ArrayList<Attribute>();
-				String tuplLine = br.readLine();
-				if (tuplLine == null)
+		  	}
+		  	else{
+				int i=0;
+			    tupleline = br.readLine();
+				if(tupleline==null)
 					return null;
-				String[] newTuplLine = tuplLine.split(",");
-				int i = 0;
-				for (Attribute attr:tuple.getAttributeList()){
-					Attribute newAttr = new Attribute();
-					newAttr.setAttributeName(attr.getAttributeName());
-					newAttr.attributeType = attr.getAttributeType();
-					newAttr.setAttributeValue(attr.getAttributeType(), newTuplLine[i]);
-					attrList.add(newAttr);
+				String[] col=tupleline.split(",");
+				ArrayList<Attribute> alist= new ArrayList<Attribute>();
+				for(Attribute a :tuple.getAttributeList()){
+					Attribute newa=new Attribute();
+					newa.setAttributeName(a.getAttributeName());
+					newa.attributeType=a.getAttributeType();
+					newa.setAttributeValue(a.getAttributeType(),col[i]);
 					i++;
+					alist.add(newa);
 				}
-				tuple = new Tuple(attrList);
+				tuple=new Tuple(alist);
 				return tuple;
-			}
-			
+		  	}
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		  }
 		return tuple;
-		
 	}
 	
 
@@ -83,5 +80,6 @@ public class Table extends Operator{
 	public ArrayList<Attribute> getAttributeList(){
 		return tuple.getAttributeList();
 	}
+	}
 	
-}
+	

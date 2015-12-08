@@ -25,31 +25,28 @@ public class Selection extends Operator{
      */
 	@Override
 	public Tuple next(){
-		//Delete the lines below and add your code here
-		Tuple tuple = this.child.next();
-		if (!child.from.equals(whereTablePredicate)) return tuple;
-		
-		Boolean flag = false;
-		while (tuple != null){
-			for (Attribute attr: tuple.getAttributeList()){	
-				if (attr.attributeName.equals(this.whereAttributePredicate) 
-						&& attr.attributeValue.toString().equals(this.whereValuePredicate)){
-					flag = true;
-					return tuple;
+		boolean selected=false;
+		attributeList = new ArrayList<Attribute>();
+		Tuple tuple= child.next();
+		if(tuple==null)
+			return null;
+		if(!child.from.equals(whereTablePredicate))
+			return tuple;
+		else{
+			while(!selected){
+			for (Attribute a:tuple.getAttributeList()){
+				if(a.getAttributeName().equals(whereAttributePredicate) && !a.getAttributeValue().equals(whereValuePredicate))
+					tuple=child.next();
+				else if(a.getAttributeName().equals(whereAttributePredicate) && a.getAttributeValue().equals(whereValuePredicate)){
+					selected=true;
 				}
-				else if (attr.attributeName.equals(this.whereAttributePredicate) 
-						&& !attr.attributeValue.toString().equals(this.whereValuePredicate)){
-					flag = true;
-					tuple = child.next();
-					break;
-				}	
-			}
-			if (!flag){
-				return tuple;
+				if(tuple==null)
+					return null;
 			}
 		}
-		return null;
+			}
 		
+		return tuple;
 	}
 	
 	/**
@@ -60,8 +57,6 @@ public class Selection extends Operator{
 		
 		return(child.getAttributeList());
 	}
-
-
 
 	
 }

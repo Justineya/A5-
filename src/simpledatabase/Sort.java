@@ -14,7 +14,8 @@ public class Sort extends Operator{
 		newAttributeList = new ArrayList<Attribute>();
 		tuplesResult = new ArrayList<Tuple>();
 		
-	}
+	}	
+	
 	
 	
 	/**
@@ -23,42 +24,57 @@ public class Sort extends Operator{
      */
 	@Override
 	public Tuple next(){
-		ArrayList<Tuple> temp = new ArrayList<Tuple>();
-		
-		if (tuplesResult.isEmpty()) {
-			Tuple tuple = child.next();
-			if(tuple==null){
-				return null;
-			}
-			else{ 
-				// add all tuples to temp
-				while (tuple != null) {
-					temp.add(tuple);
-					tuple = child.next();
-				}
-			}
+		ArrayList<Tuple> tuples= new ArrayList<Tuple>(); 
+		if(tuplesResult.isEmpty()==true){
+		int i,j=0;
+		while(true){
+			Tuple tuple=child.next();
+			if(tuple==null)
+				break;
 			
-			//compare one y one, find the min one and store in tuplesResult
-			tuple = temp.get(0);
-			for(int i = 0 ; i <tuple.getAttributeList().size() ; i++){
-				if(tuple.getAttributeName(i).equals(orderPredicate)){
-					while(!temp.isEmpty()){
-						int min = 0;
-						for(int j = 0; j < temp.size();j++){
-							if((temp.get(j).getAttributeValue(i)).toString().
-									compareTo(temp.get(min).getAttributeValue(i).toString())<0)
-								min = j;
-						}
-						tuplesResult.add(temp.get(min));
-						temp.remove(min);
-					}
-				}
-			}
-			
+			tuples.add(tuple);
 		}
-		Tuple tuple1 = tuplesResult.remove(0);
-		return tuple1;
+		for(Tuple tuple1:tuples){
+			i=0;
+			if(tuplesResult.isEmpty()==true){
+				tuplesResult.add(tuple1);
+				j++;
+				continue;
+			}
+		 
+			    for(Attribute a:tuple1.getAttributeList()){
+			    	for(int m=0;m<tuplesResult.get(i).getAttributeList().size();m++){
+			    		if(a.getAttributeName().equals(this.orderPredicate) &&tuplesResult.get(i).getAttributeList().get(m).getAttributeName().equals(orderPredicate)){
+			    			if(a.getAttributeValue().toString().compareTo(tuplesResult.get(i).getAttributeList().get(m).getAttributeValue().toString())>0){
+			    				i++;
+			    				m--;
+						    	if(i==j){
+						    		tuplesResult.add(i, tuple1);
+						    		j++;
+						    		break;}
+			    				continue;
+			    			}
+			    			tuplesResult.add(i, tuple1);
+			    			j++;
+			    			i=0;
+			    			break;
+			    		}
+			    	}
+			    }
+				
+			
+			}
+		}
+		try{
+		Tuple tuple=tuplesResult.remove(0);
+		return tuple;
 		
+		}
+		catch(Exception e ){
+			return null;
+		}
+		
+
 	}
 	
 	/**

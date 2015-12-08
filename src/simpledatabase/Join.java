@@ -1,8 +1,6 @@
 package simpledatabase;
 import java.util.ArrayList;
 
-
-
 public class Join extends Operator{
 
 	private ArrayList<Attribute> newAttributeList;
@@ -17,9 +15,8 @@ public class Join extends Operator{
 		this.joinPredicate = joinPredicate;
 		newAttributeList = new ArrayList<Attribute>();
 		tuples1 = new ArrayList<Tuple>();
+	   }
 		
-	}
-
 	
 	/**
      * It is used to return a new tuple which is already joined by the common attribute
@@ -28,44 +25,37 @@ public class Join extends Operator{
 	//The record after join with two tables
 	@Override
 	public Tuple next(){
-		
-		//Delete the lines below and add your code here
-		
-		
-		while (true){
-			Tuple ltuple = this.leftChild.next();
-			if (ltuple == null) break;
-			tuples1.add(ltuple);
-		}
-	
-		Tuple rtuple = this.rightChild.next();
-		if (rtuple == null){	
-			return null;		
-		}
-		
-		for (Tuple ltuple1:tuples1){	
-			for (Attribute lattr:ltuple1.getAttributeList()){
-				for (Attribute rattr: rtuple.getAttributeList()){
-					if (lattr.getAttributeName().equals(rattr.getAttributeName()) && 
-							lattr.getAttributeValue().equals(rattr.getAttributeValue())){
-						for (Attribute a:ltuple1.getAttributeList())
-							newAttributeList.add(a);
+		while(true){
+			Tuple tuple=leftChild.next();
+			if(tuple==null)
+				break;
+			tuples1.add(tuple);
 
-						for (Attribute a: rtuple.getAttributeList()){
-							if (!a.getAttributeName().equals(lattr.getAttributeName()))
-								newAttributeList.add(a);
+		}
+		newAttributeList = new ArrayList<Attribute>();
+		Tuple tuple1= rightChild.next();
+		if(tuple1==null)
+			return null;
+		for (Attribute a:tuple1.getAttributeList()){
+			for(Tuple tuple:tuples1){
+				for(Attribute a1:tuple.getAttributeList()){
+					if(a.getAttributeName().equals(a1.getAttributeName())&& a.getAttributeValue().equals(a1.getAttributeValue()) ){
+						for (Attribute a2:tuple1.getAttributeList()){
+							newAttributeList.add(a2);
 						}
-					}						
-				}
+						for(Attribute a3:tuple.getAttributeList()){
+							if(!a3.getAttributeName().equals(a.getAttributeName()))
+							newAttributeList.add(a3);
+						}
+			}
+			
+		}
 			}
 		}
-		
-		
-		Tuple tuple1 = new Tuple(newAttributeList);
-		newAttributeList = new ArrayList<Attribute>();
+		tuple1=new Tuple(newAttributeList);
 		return tuple1;
-	
 	}
+	
 	
 	/**
      * The function is used to get the attribute list of the tuple

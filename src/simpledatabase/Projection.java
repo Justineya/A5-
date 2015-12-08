@@ -22,25 +22,18 @@ public class Projection extends Operator{
      */
 	@Override
 	public Tuple next(){
-		//Delete the lines below and add your code here
-
-		Tuple tuple = child.next();
-		if (tuple == null)
-			return tuple;
-
-		for (Attribute attr:tuple.getAttributeList()){
-			if (this.attributePredicate.equals(attr.getAttributeName())){
-				if (newAttributeList.size() == 0)
-					newAttributeList.add(attr);
-				else
-					newAttributeList.set(0, attr);
-			
-				Tuple tuple1 = new Tuple(newAttributeList);
-				return tuple1;
+		newAttributeList=new ArrayList<Attribute>();
+		Tuple tuple=child.next();
+		if(tuple==null)
+			return null;
+		for (Attribute a:tuple.getAttributeList()){
+			if (a.attributeName.equals(attributePredicate)){
+				newAttributeList.add(a);
 			}
 		}
-		
-		return null;
+		tuple=new Tuple(newAttributeList);
+
+		return tuple;
 		
 	}
 		
@@ -54,6 +47,4 @@ public class Projection extends Operator{
 		return child.getAttributeList();
 	}
 
-	
-	
 }
