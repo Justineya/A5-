@@ -37,13 +37,11 @@ public class Table extends Operator{
 				attributeline = br.readLine();
 				dataTypeline = br.readLine();
 			    tupleline = br.readLine();
-				getAttribute = true;
-				if(tupleline==null)
-					return null;
 				tuple=new Tuple(attributeline,dataTypeline,tupleline);
 				tuple.setAttributeName();
 				tuple.setAttributeType();
 				tuple.setAttributeValue();
+				getAttribute = true;
 				return tuple;
 		  	}
 		  	else{

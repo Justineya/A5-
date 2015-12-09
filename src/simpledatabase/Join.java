@@ -37,13 +37,13 @@ public class Join extends Operator{
 		if(tuple1==null)
 			return null;
 		for (Attribute a:tuple1.getAttributeList()){
-			for(Tuple tuple:tuples1){
-				for(Attribute a1:tuple.getAttributeList()){
+			for(Tuple tuple2:tuples1){
+				for(Attribute a1:tuple2.getAttributeList()){
 					if(a.getAttributeName().equals(a1.getAttributeName())&& a.getAttributeValue().equals(a1.getAttributeValue()) ){
 						for (Attribute a2:tuple1.getAttributeList()){
 							newAttributeList.add(a2);
 						}
-						for(Attribute a3:tuple.getAttributeList()){
+						for(Attribute a3:tuple2.getAttributeList()){
 							if(!a3.getAttributeName().equals(a.getAttributeName()))
 							newAttributeList.add(a3);
 						}
